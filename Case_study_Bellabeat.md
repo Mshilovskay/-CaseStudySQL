@@ -1,12 +1,13 @@
 ---
 ## Mariia Shilovskaia - Case study: Bellabeat
-
 ---
 
 # Introduction
+
 This is a case study for my Google Data Analytics certificate course. In my analysis I will follow the six steps of the data analysis process: ask, prepare, process, analyze, share, and act.
 
 ## Scenario
+
 A junior data analyst needs to focus and analyze a public data set about fitness data of smart devices on the analyst team at Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat’s cofounder and Chief Creative Officer believes that analyzing smart device fitness data could help unlock new growth opportunities for the company. Data analyst team needs to focus on one of Bellabeat’s products and analyze smart device data to gain insight into how consumers are using their smart devices. The insights you discover will then help guide marketing strategy for the company. You will present your analysis to the Bellabeat executive team along with your high-level recommendations for Bellabeat’s marketing strategy.
 
 ## Step 1: Ask
@@ -14,17 +15,22 @@ A junior data analyst needs to focus and analyze a public data set about fitness
 Business Task for this project:
 * Analyze smart device fitness data to gain insight into how consumers use Bellabeat devices and look for growth opportunities.
 * Focus on data from Bellabeat products and gain insight into how consumers are using their smart devices.
-* Present recommendations for Bellabeat’s marketing strategy
+* Present recommendations for Bellabeat’s marketing strategy.
+
 ### Stakeholders:
+
 * Urška Sršen: Bellabeat’s co-founder and Chief Creative Officer
 * Sando Mur: Mathematician and Bellabeat’s cofounder; a key member of the Bellabeat executive team
 * Bellabeat marketing analytics team: A team of data analysts responsible for collecting, analyzing, and reporting data that helps guide Bellabeat’s marketing strategy. You joined this team six months ago and have been busy learning about Bellabeat’’s mission and business goals — as well as how you, as a junior data analyst, can help Bellabeat achieve them
+
 ### Products:
+
 * Bellabeat app: The Bellabeat app provides users with health data related to their activity, sleep, stress, menstrual cycle, and mindfulness habits. This data can help users better understand their current habits and make healthy decisions. The Bellabeat app connects to their line of smart wellness products.
 * Leaf: Bellabeat’s classic wellness tracker can be worn as a bracelet, necklace, or clip. The Leaf tracker connects to the Bellabeat app to track activity, sleep, and stress.
 * Time: This wellness watch combines the timeless look of a classic timepiece with smart technology to track user activity, sleep, and stress. The Time watch connects to the Bellabeat app to provide you with insights into your daily wellness.
 * Spring: This is a water bottle that tracks daily water intake using smart technology to ensure that you are appropriately hydrated throughout the day. The Spring bottle connects to the Bellabeat app to track your hydration levels.
 * Bellabeat membership: Bellabeat also offers a subscription-based membership program for users. Membership gives users 24/7 access to fully personalized guidance on nutrition, activity, sleep, health and beauty, and mindfulness based on their lifestyle and goals.
+
 ### Step 2: Prepare
 
 In this case study will be used public data that explores Bellabeat smart device users’ daily habits. The data set contains personal fitness tracker from thirty fitbit users about physical activity, weight and sleep monitoring. This Fitabase data is located at Kaggle and was collected from 4.12.2016 to 5.12.2016. For analysis will used three tables from this dataset: dailyActivity_mergeds.csv, sleepDay_merged.csv, and weightLogInfo_merged.csv, renamed DailyActivity.csv, SleepLog.csv, and WeightLog.csv, respectively.
@@ -34,7 +40,6 @@ This data isn’t representative, because the data is too old and Bellabeat may 
 ## Step 3: Process
 
 For analysis will use BiqQuery SQL and Excel. The CSV files, DailyActivity.csv, SleepLog.csv, and WeightLog.csv,  have been uploaded to BigQuery, my-project-06-22-22.Fitabase.
-
 
 ### Inspect the length of id for all three tables with data:
 
@@ -113,6 +118,7 @@ WHERE LENGTH(CAST(Id AS STRING)) > 10
 ```
 
 ### Inspect the length column for all three tables:
+
 ```
 SELECT 
     MIN(TotalSteps) AS min_total_steps,
@@ -149,6 +155,7 @@ FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 ``` 
  
 ### Inspect missing data for all three tables:
+
 ```
 SELECT *
 FROM `my-project-06-22-22.Fitabase.dailyActivity`
@@ -212,6 +219,7 @@ HAVING NumberOfRows > 1
 ```
 
 ### Create a new table with data and without duplicates:
+
 ```
 CREATE TABLE my-project.Fitabase.sleepDayDedup
 AS
@@ -386,20 +394,38 @@ Logged users are more active, in total they had more steps (8088 vs 7441) and sp
 
 Tuesday and Saturday are more active days for users. Sunday looks like a “lazy day”.
 
+<img src="Average steps per day of week.png"
+     alt="Average steps per day of week"
+     style="float: left; margin-right: 10px;" height=275 />
 
+<img src="Average calories per day of week.png"
+     alt="Average calories per day of week"
+     style="float: left; margin-right: 10px;" height=280 />
+     
+<img src="Average distance per day of week.png"
+     alt="Average distance per day of week"
+     style="float: left; margin-right: 10px;" height=252 />
 
 
 ### Sleep hours:
 
 Sunday is also the day when users sleep more. At the same time users sleep more after active days (Tuesday and Saturday). 
 
+<img src="Average hours of sleep per day.png"
+     alt="Average hours of sleep per day"
+     style="float: left; margin-right: 10px;" height=245 />
 
- 
+<img src="Average time to fall asleep per day.png"
+     alt="Average time to fall asleep per day"
+     style="float: left; margin-right: 10px;" height=260 /> 
 
 
 ### Weight records:
 On Wednesday users had the highest record of weight during the week. Maybe it happened after pretty active Tuesday, but still it only contains information from 8 users of device. 
 
+<img src="Average weight per day of week.png"
+     alt="Average weight per day of week"
+     style="float: left; margin-right: 10px;" height=250 /> 
 
 ## Step 6: Act
 
