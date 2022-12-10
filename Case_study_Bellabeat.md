@@ -1,3 +1,8 @@
+---
+## Mariia Shilovskaia - Case study: Bellabeat
+
+---
+
 # Introduction
 This is a case study for my Google Data Analytics certificate course. In my analysis I will follow the six steps of the data analysis process: ask, prepare, process, analyze, share, and act.
 
@@ -31,8 +36,9 @@ This data isn’t representative, because the data is too old and Bellabeat may 
 For analysis will use BiqQuery SQL and Excel. The CSV files, DailyActivity.csv, SleepLog.csv, and WeightLog.csv,  have been uploaded to BigQuery, my-project-06-22-22.Fitabase.
 
 
-### 3.1.Inspect the length of id for all three tables with data:
+### Inspect the length of id for all three tables with data:
 
+```
 SELECT
     DISTINCT Id
 FROM `my-project-06-22-22.Fitabase.dailyActivity` 
@@ -84,7 +90,7 @@ WHERE LENGTH(CAST(Id AS STRING)) > 10
 SELECT
     DISTINCT Id
 FROM `my-project-06-22-22.Fitabase.weightLogInfo`
-# 8 rows with unique Id
+#8 rows with unique Id
  
 SELECT
     LENGTH(CAST(Id AS STRING))
@@ -104,8 +110,10 @@ FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 WHERE LENGTH(CAST(Id AS STRING)) > 10
 #Checking if any Id has a length more than 10 symbols
 #Output: There is no data to display
- 
-### 3.2.: Inspect the length column for all three tables:
+```
+
+### Inspect the length column for all three tables:
+```
 SELECT 
     MIN(TotalSteps) AS min_total_steps,
     MIN(TotalDistance) AS min_total_distance,
@@ -138,9 +146,10 @@ SELECT
     AVG(BMI) AS avg_bmi
 FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 #Checking max, min, average in columns for weighLogInfo table
+``` 
  
- 
-### 3.3.: Inspect missing data for all three tables:
+### Inspect missing data for all three tables:
+```
 SELECT *
 FROM `my-project-06-22-22.Fitabase.dailyActivity`
 WHERE Id IS NULL
@@ -155,10 +164,12 @@ SELECT *
 FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 WHERE Id IS NULL
 #Output: There is no data to display
- 
-### 3.4.: Identify potential errors in all three tables:
+```
+
+### Identify potential errors in all three tables:
 #Checking date records in all tables: StartDate is 2016-04-12, EndDay is 2016-05-12
- 
+
+```
 SELECT
     MIN(ActivityDate) AS startDate, 
     MAX(ActivityDate) AS endDate
@@ -173,9 +184,11 @@ SELECT
 MIN(Date) AS startDate,
 MAX(Date) AS endDate
 FROM `my-project-06-22-22.Fitabase.weightLogInfo`
- 
-#Searching duplicate rows in tables by checking unique Id number and the date of record:
- 
+```
+
+### Searching duplicate rows in tables by checking unique Id number and the date of record:
+
+```
 SELECT
     ID, ActivityDate, COUNT(*) AS NumberOfRows
 FROM `my-project-06-22-22.Fitabase.dailyActivity`
@@ -196,8 +209,10 @@ FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 GROUP BY Id, Date
 HAVING NumberOfRows > 1
 #Output: None
- 
-#Create a new table with data and without duplicates:
+```
+
+### Create a new table with data and without duplicates:
+```
 CREATE TABLE my-project.Fitabase.sleepDayDedup
 AS
 SELECT
@@ -205,14 +220,14 @@ DISTINCT *
 FROM `my-project-06-22-22.Fitabase.sleepDay`
  
 #Checking for duplicates in sleepDayDedup:
+
 SELECT
     Id, SleepDay, COUNT(*) AS NumberOfRows
 FROM `my-project-06-22-22.Fitabase.sleepDayDedup`
 GROUP BY Id, SleepDay
 HAVING NumberOfRows > 1
 #Output: None
- 
- 
+  
 SELECT
 *, 
 COUNT(*) AS NumberOfRows
@@ -220,10 +235,12 @@ FROM `my-project-06-22-22.Fitabase.weightLogInfo`
 GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 HAVING NumberOfRows > 1
 #None
- 
-### 3.5.:Ensure consistency in all three tables:
+```
+
+### Ensure consistency in all three tables:
 #Merge all data in one table:
- 
+
+```
 SELECT*
 FROM `my-project-06-22-22.Fitabase.dailyActivity` AS dailyActivity
 LEFT JOIN
@@ -232,11 +249,13 @@ ON dailyActivity.Id = sleepDayDedup.Id
 LEFT JOIN
 `my-project-06-22-22.Fitabase.weightLogInfo` AS weightLogInfo
 ON dailyActivity.Id = weightLogInfo.Id ;
- 
+```
+
 ## Step 4: Analysis
 
-### 4.1. Checking average for unique users in merge table:
- 
+### Checking average for unique users in merge table:
+
+```
 SELECT
     dailyActivity.Id,
     AVG(dailyActivity.TotalDistance) AS total_distance,
@@ -254,9 +273,11 @@ FROM `my-project-06-22-22.Fitabase.dailyActivity` AS dailyActivity
 LEFT JOIN `my-project-06-22-22.Fitabase.sleepDayDedup`  AS sleepDayDedup ON dailyActivity.Id = sleepDayDedup.Id
 LEFT JOIN `my-project-06-22-22.Fitabase.weightLogInfo` AS weightLogInfo ON dailyActivity.Id = weightLogInfo.Id
 GROUP BY dailyActivity.Id;
- 
-### 4.2. Calculating active per day for daily activity table:
- 
+```
+
+### Calculating active per day for daily activity table:
+
+``` 
 SELECT
     AVG(TotalSteps) AS AvgSteps, AVG(TotalDistance) AS AvgDistance, AVG(Calories) AS     AvgCalories,
     CASE
@@ -274,9 +295,11 @@ FROM
  FROM `my-project-06-22-22.Fitabase.dailyActivity`) as temp
 GROUP BY DayOfWeek
 ORDER BY DayOfWeek
+```
+
+### Calculating active per day for sleepDayDedup table:
  
-### 4.3. Calculating active per day for sleepDayDedup table:
- 
+``` 
 SELECT
     AVG(TotalMinutesAsleep) AS AvgMinutesAsleep,
     AVG(TotalMinutesAsleep / 60) AS AvgHoursAsleep,
@@ -296,8 +319,11 @@ FROM
  FROM `my-project-06-22-22.Fitabase.sleepDayDedup`) as temp
 GROUP BY DayOfWeek
 ORDER BY DayOfWeek
- 
-### 4.4. Calculating active per day for weightLogInfo table:
+```
+
+### Calculating active per day for weightLogInfo table:
+
+```
 SELECT
     AVG(WeightPounds) AS AvgWeighPounds,
     CASE
@@ -315,9 +341,11 @@ FROM
  FROM `my-project-06-22-22.Fitabase.weightLogInfo`) as temp
 GROUP BY DayOfWeek
 ORDER BY DayOfWeek
+``` 
  
- 
-#Logged and Unlogged Users
+### Cheking logged and Unlogged Users
+
+```
 SELECT
  DISTINCT Id
 FROM `my-project-06-22-22.Fitabase.dailyActivity`
@@ -340,32 +368,28 @@ SELECT
  DISTINCT Id
 FROM `my-project-06-22-22.Fitabase.sleepDayDedup`
 #24 Id users with records
- 
-SELECT
- DISTINCT Id
-FROM `my-project-06-22-22.Fitabase.weightLogInfo`
-WHERE Fat != 0
-#Only 2 users had records 
+``` 
  
 ## Step 5: Share
 
 The results were explored in Google sheets and Excel.
 
-### 5.1 Logged records for all 33 unique users:
+### Logged records for all 33 unique users:
+
 * Only 12% of users logged records for their distance activity 
 * 24% of users put information about the weight
 * Most of users, 72% measure sleeping time
 
 Logged users are more active, in total they had more steps (8088 vs 7441) and spent more calories (2524 vs 2249) than users who didn’t logged in. The average distance for logged users is also longer (5,8 vs 5,3).
    
-### 5.2. Daily active:
+### Daily active:
 
 Tuesday and Saturday are more active days for users. Sunday looks like a “lazy day”.
 
 
 
 
-### 5.3.Sleep hours:
+### Sleep hours:
 
 Sunday is also the day when users sleep more. At the same time users sleep more after active days (Tuesday and Saturday). 
 
@@ -373,7 +397,7 @@ Sunday is also the day when users sleep more. At the same time users sleep more 
  
 
 
-### 5.4. Weight records:
+### Weight records:
 On Wednesday users had the highest record of weight during the week. Maybe it happened after pretty active Tuesday, but still it only contains information from 8 users of device. 
 
 
