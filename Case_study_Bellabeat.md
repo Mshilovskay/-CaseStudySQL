@@ -424,4 +424,4 @@ On Wednesday users had the highest record of weight during the week. Maybe it ha
 
 * Simplify the process of entering information for users (activities, weight, sleep hours and etc).
 * Offer benefits or special health program for users who provide more accurate information and logged in device.
-* Continue to collect the data for future analysis.
+* Continue to collect data for future analysis.
